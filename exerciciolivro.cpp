@@ -47,7 +47,6 @@ int main(){
 
     cout << "Digite qual opção você deseja!" << endl;
     cin >> opcao;
-    i = 0;
     
 
     while(opcao != 9){
@@ -70,19 +69,19 @@ int main(){
                         cin.ignore();
 
                         cout << "Qual a area desse livro? (Ciencias exatas, Ciencias humanas e Ciencias da saude)" << endl;
-                        cin >> liv.area;
+                        cin.get(liv.area, 29);
                         cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
                         cout << "Qual o titulo deste livro?" << endl;
-                        cin >> liv.titulo;
+                        cin.get(liv.titulo,99);
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                         cout << "Quem é o autor deste livro?" << endl;
-                        cin >> liv.autor;
+                        cin.get(liv.autor,11);
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                         cout << "Qual a editora deste livro?" << endl;
-                        cin >> liv.editora;
+                        cin.get(liv.editora,14);
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                         cout << "Quantas paginas esse livro possui?" << endl;
