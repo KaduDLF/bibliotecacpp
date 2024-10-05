@@ -36,7 +36,7 @@ int main(){
     };
 
     struct livros liv;
-    int opcao, i, codigoE, campo;
+    int opcao, livrosDispon, codigoE, campo;
     string nomeUsu, saber;
     char opc;
 
@@ -58,8 +58,17 @@ int main(){
                 livroscadastrados = fopen("livros_cadastrados.dat", "ab+");
                 if(livroscadastrados == NULL){
                     cout << "Arquivo Não foi aberto";
+                    cin.get();
+                    livroscadastrados = fopen("livros_cadastrados.dat", "wb");
+                    if(livroscadastrados == NULL){
+                        cout << "Arquivo Não foi aberto";
+                        break;
+                    }else{
+                        cout << "arquivo criado com sucesso";
+                        cin.get();
+                    }
                 }else{
-                    cout << "Deseja cadastrar outro livro? use 'S' para sim e 'N' para não!" << endl;
+                    cout << "Deseja cadastrar um livro? use 'S' para sim e 'N' para não!" << endl;
                     cin >> opc;
                     
                     while(opc == 'S'){                        
@@ -87,7 +96,6 @@ int main(){
                         cout << "Quantas paginas esse livro possui?" << endl;
                         cin >> liv.nPag;
 
-                        liv.qtdLivros++;
                         system("cls");
                         if(fwrite(&liv, sizeof(struct livros), 1, livroscadastrados) == 1){
                             cout << "Registro gravado com sucesso!" << endl;
@@ -96,7 +104,7 @@ int main(){
                             cout << "Erro ao gravar registro";
                             cin.get();
                         }
-                        cout << "Deseja cadastrar um Livro? use 'S' para sim e 'N para não!" << endl;
+                        cout << "Deseja cadastrar outro Livro? use 'S' para sim e 'N' para não!" << endl;
                         cin >> opc;
                         
                     }
@@ -107,17 +115,18 @@ int main(){
                 cout << "Digite o codigo do livro que você deseja alterar." << endl;
                 cin >> codigoE;
                 livroscadastrados = fopen("livros_cadastrados.dat", "rb+");
-                while(!feof(livroscadastrados)){
-                    fread(&liv, sizeof(struct livros), 1 ,livroscadastrados);
+                fread(&liv, sizeof(struct livros), 1 ,livroscadastrados);
+                while(!feof(livroscadastrados)){ 
                     if(codigoE == liv.codigo){
                         fseek(livroscadastrados, -sizeof(struct livros), SEEK_CUR);
                         cout << "Digite qual campo você deseja alterar" << endl;
                         cout << "1 - area, 2 - titulo, 3 - autor, 4 - editora, 5 - numeroPaginas" << endl;
                         cin >> campo;
+                        cin.get();
                         switch (campo) {
                             case 1:
                                 cout << "novo valor de area: ";
-                                cin >> liv.area;
+                                cin.get(liv.area, 29);
                                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                                 fwrite(&liv, sizeof(struct livros), 1, livroscadastrados);
                                 cout << "Nova area alterada com sucesso" << endl;
@@ -126,7 +135,7 @@ int main(){
                                 break;
                             case 2:
                                 cout << "Novo valor de titulo: ";
-                                cin >> liv.titulo;
+                                cin.get(liv.titulo,99);
                                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                                 fwrite(&liv, sizeof(struct livros), 1, livroscadastrados);
                                 cout << "Nova area alterada com sucesso" << endl;
@@ -135,7 +144,7 @@ int main(){
                                 break;
                             case 3:
                                 cout << "Novo valor de autor: ";
-                                cin >> liv.autor;
+                                cin.get(liv.autor,11);
                                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                                 fwrite(&liv, sizeof(struct livros), 1, livroscadastrados);
                                 cout << "Nova area alterada com sucesso" << endl;
@@ -144,7 +153,7 @@ int main(){
                                 break;
                             case 4:
                                 cout << "Novo valor de editora: ";
-                                cin >> liv.editora;
+                                cin.get(liv.editora,14);
                                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                                 fwrite(&liv, sizeof(struct livros), 1, livroscadastrados);
                                 cout << "Nova area alterada com sucesso" << endl;
@@ -166,10 +175,11 @@ int main(){
                                 
                         }break;
                     }
+                    fread(&liv, sizeof(struct livros), 1 ,livroscadastrados);
                 }
                 break;
             case 3:
-                cout << "Deseja excluir todo o arquivo? S para sim e N para nao" << endl;
+                cout << "Deseja excluir todo o arquivo? 'S' para sim e 'N' para nao" << endl;
                 cin >> opc;
                 if(opc == 'S'){
                     livroscadastrados = fopen("livros_cadastrados.dat", "wb");
@@ -177,7 +187,7 @@ int main(){
                     cout << "Registros excluidos" << endl;
                     cin.get();
                 }else if(opc == 'N'){
-                    cout << "Deseja excluir um registro especifico? S para sim e N para não" << endl;
+                    cout << "Deseja excluir um registro especifico? 'S' para sim e 'N' para não" << endl;
                     cin >> opc;
                     if(opc == 'S'){
                         cout << "Digite o codigo do livro para exclusão" << endl;
@@ -301,6 +311,7 @@ int main(){
                 }
                 break;
             case 7:
+                livrosDispon = 0 ;
                 cout << "Esta é a lista de todos livros disponiveis." << endl;
                 livroscadastrados = fopen("livros_cadastrados.dat", "rb");
                 while(fread(&liv, sizeof(struct livros), 1 ,livroscadastrados) == 1){
@@ -311,8 +322,11 @@ int main(){
                         cout << "Editora: " << liv.editora << " n De pag: " << liv.nPag << endl;
                         cout << "Este livro esta disponivel " << endl;
                         cout << "----------------------------------" << endl;
+                        livrosDispon++;
                     }
                 }
+                cin.get();
+                cout << "existem " << livrosDispon << " livros disponiveis" << endl;
                 cin.get();
                 fclose(livroscadastrados);
                 break;  
