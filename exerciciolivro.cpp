@@ -312,7 +312,7 @@ int main(){
                 break;
             case 7:
                 livrosDispon = 0 ;
-                cout << "Esta é a lista de todos livros disponiveis." << endl;
+                cout << "Esta é a lista de todos livros disponiveissss." << endl;
                 livroscadastrados = fopen("livros_cadastrados.dat", "rb");
                 while(fread(&liv, sizeof(struct livros), 1 ,livroscadastrados) == 1){
                     if(liv.disponivel == true){
